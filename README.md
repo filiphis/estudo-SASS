@@ -2,6 +2,7 @@
 <!-- :construction: -->
 # Estudo sobre SCSS
 > **_Status:_** Finalizado :heavy_check_mark:
+
 <!-- > **_Status:_** Em andamento :construction: -->
 
 ## Descrição
