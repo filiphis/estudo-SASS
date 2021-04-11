@@ -1,3 +1,5 @@
+<!-- :heavy_check_mark: -->
+<!-- :construction: -->
 # Estudo sobre SCSS :heavy_check_mark:
 
 ## Descrição
