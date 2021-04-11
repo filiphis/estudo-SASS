@@ -1,0 +1,130 @@
+// Funções, Mixin's & Placeholder's
+
+%no-decoration {
+  text-decoration: none;
+}
+
+%u-decoration {
+  text-decoration: underline;
+}
+
+@mixin reset-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@mixin flx($property, $jty-cnt) {
+  display: flex;
+  #{$property}: $jty-cnt;
+}
+
+@mixin for-phone-only {
+  @media (max-width: 767.98px) {
+    @content;
+  }
+}
+
+@mixin for-tablet-only {
+  @media (min-width: 768px) and (max-width: 1199.98px) {
+    @content;
+  }
+}
+
+@mixin for-desktop-only {
+  @media (min-width: 1200px) {
+    @content;
+  }
+}
+
+@function calculateRem($size) {
+  @return $size / 16px * 1rem;
+}
+
+@mixin fontSize($size) {
+  font-size: calculateRem($size);
+}
+
+// Gerando espaços para Margin e Top
+$sizes: 0, 1, 2, 3, 4, 5;
+$directions: top, bottom, left, right;
+$layout-space-size: 8px;
+
+// Generate classes space for margin
+@each $direction in $directions {
+  @for $i from 0 through 5 {
+    %m-#{$direction}-#{$i} {
+      margin-#{$direction}: $layout-space-size * $i;
+    }
+  }
+}
+
+@for $i from 0 through 5 {
+  %m-#{$i} {
+    margin: $layout-space-size * $i;
+  }
+}
+
+// Generate Margin class for Left & Right
+@for $i from 0 through 5 {
+  %mx-#{$i} {
+    margin-left: $layout-space-size * $i;
+    margin-right: $layout-space-size * $i;
+  }
+}
+
+// Generate Margin class for Top & Bottom
+@for $i from 0 through 5 {
+  %my-#{$i} {
+    margin-left: $layout-space-size * $i;
+    margin-right: $layout-space-size * $i;
+  }
+}
+
+// Margin auto for all sides
+%m-auto {
+  margin: auto;
+}
+
+// Generate Margin class auto for Left & Right
+%mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+// Generate Margin class auto for Top & Bottom
+%my-auto {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+// Generate classes space for padding
+@each $direction in $directions {
+  @for $i from 0 through 5 {
+    %p-#{$direction}-#{$i} {
+      padding-#{$direction}: $layout-space-size * $i;
+    }
+  }
+}
+
+@for $i from 0 through 5 {
+  %p-#{$i} {
+    padding: $layout-space-size * $i;
+  }
+}
+
+// Generate padding class for Left & Right
+@for $i from 0 through 5 {
+  %px-#{$i} {
+    padding-left: $layout-space-size * $i;
+    padding-right: $layout-space-size * $i;
+  }
+}
+
+// Generate padding class for Top & Bottom
+@for $i from 0 through 5 {
+  %py-#{$i} {
+    padding-left: $layout-space-size * $i;
+    padding-right: $layout-space-size * $i;
+  }
+}

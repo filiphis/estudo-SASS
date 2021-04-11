@@ -1,0 +1,340 @@
+<!-- :: Instalando o SASS :: 
+
+  Instale o sass globalmente em seu computador
+    yarn global add sass || npm install -g sass
+
+-->
+
+<!-- :: Compilação ::
+
+  Le o arquivo .scss e gera um .css
+    sass --watch dir/style.scss:dir/style.css
+ 
+ -->
+
+<!-- :: Variaveis ::
+  Podemos criar as variaveis em qualquer lugar do arquivo scss. 
+  Sempre crie as variaveis em escopo global. Exemplo de variaveis:
+    $main-bgcolor: red;
+    $var-name: valor;
+  
+  Utilizando a variavel:
+    div { background-color: $main-bgcolor;}
+  -->
+
+<!-- :: Nesting ( Agrupamento/Encadeamento ) e Parent Selector/Referencia (&) ::  
+
+    Podemos estilizar os elementos utilizando o conceito de herança. EX:
+      body {
+        background-color: $bg-color;
+
+        h1 {
+          color: $text-color
+        }
+      }
+    
+    Quando quisermos selecionar o elemento que estamos (parent) podemos utilizar o (&). EX:
+      button {
+        color: $btn-color;
+
+        $:hover {
+          background-color: $btn-hover-bg-color;
+        }
+      }
+
+  -->
+
+<!-- :: Interpolation (#{$var}) :: 
+  É utilizado quando precisamos utilizar variaveis do scss em expressões css. Ex:
+
+  $img-width: 40%;
+
+    img {
+    width: $img-width;
+  }
+
+  //Injetando o valor da variavel na expressão calc()
+  width-restanate {
+    width: calc(100% - #{$img-width});
+  }
+
+-->
+
+<!-- :: Partials ( _ ) ::
+    Arquivos .sass que em seu nome iniciem com underline, não serão compilados de sass para css.
+    Estes arquivos são utilizados somente para serem importados por outros arquivos. EX:
+      _base.scss >> Não será compilado
+      @import '_base'; >> Ao ser importado em um arquivo .scss, será compilado !
+  -->
+
+<!-- :: Mixins ::
+  São parecidos com funções, é criado um pedaço de estilo que pode ser reaproveitado.
+  São criados com a palavra chave @mixin name(){} e utilizados dentro de um seletor com @include name(); Ex:
+    //Criando o mixin
+    @mixin box-shadow($cor) {
+      box-shadow: 3px 3px 3px $cor;
+    }
+
+    //Aplicando o mixin a um elemento
+    div {
+      @include box-shadow();
+    }
+-->
+
+<!-- :: Funções :: 
+  Bem parecidas com os mixin's, porem, retornam um valor. EX:
+  @function name($arg1, $opcionalArg: defaultValue){@return valuesReturn}
+  @function name($listArgs...){}
+
+  @function calculateRem($size) {
+    @return $size / 16px * 1rem;
+  }
+
+  @mixin fontSize($size) {
+    font-size: calculateRem($size);
+  }
+-->
+
+<!-- :: Condicionais ::
+  Mesma coisa que condicional de qualquer linguagem. Ex:
+  No parametro do mixin é possivel citar um valor padrão ( $value: default )
+  @mixin corDoTexto($status){
+    @if $status == danger {
+        color: red;
+    }
+    @else if $status == alert {
+      color: yellow;
+    }
+    @else {
+      color:black;
+    }
+  }
+
+  p {
+    //Aqui podemos informar como parametro os valores condicionais setados
+    @include corDoTexto(danger);
+  }
+-->
+
+<!-- :: Repetições :: 
+  Repete um trecho de codigo. Ex:
+
+  //For
+  @for $i from 1 through 4 {
+    .elemento-#{$i} {
+      font-size: 10px * $i;
+    }
+  }
+
+  O ForEach passa por uma coleção de valores realizando operações para cada um.
+  //Criando uma coleção
+    $colors: blue, red, yellow;
+
+  @each $color in colors {
+    .#{$color}-text{
+      color: $color;
+    }
+  }
+
+
+  //While
+  $x: 1;
+  @while $x < 5 {
+    &__p-#{$x} {
+      @include fontSize(40px / $x);
+      padding-top: 5px * $x;
+    }
+    $x: $x + 1;
+  }
+
+-->
+
+<!-- :: Herança :: 
+  É criado um bloco de formatação com um seletor normal, e esse bloco é herdado. Ex:
+
+  // Seletor que será herdado 
+  .primaryText {
+    font-size:1rem;
+    font-weight: 1.6px;
+    color: gray;
+  }
+
+  //Pagrafo herda todo o codigo do seletor;
+  p {
+    @extend .primaryText;
+    text-align: center;
+  }
+-->
+
+<!-- :: Placeholders ( % ) :: 
+  Muito parecido com a herança porem, se repete menos no css gerado. Priorize este do que herança
+  %placeholder1 {text-decoration: none;}
+  %placeholder2 {text-decoration: underline;}
+
+  .teste {
+   @extend %placeholder1;
+
+    &:hover {
+      @extend %placeholder2;
+    }
+}
+
+
+-->
+
+<!-- :: Dicas :: 
+  - Crie um arquivo somente com as variaveis e depois importe-o ( _variables.scss )
+  - Crie um arquivo com o reset css ( _reset.scss )
+  - Crie um arquivo com a base do projeto ( _base.scss )
+    - No _base.scss crie mixins/herança para blocos que se repetem
+  .
+  
+-->
+
+<!-- :: Utils ->> Verifica cor do Site :: 
+
+  //Verifica a cor principal do site ( se é escura ou clara ) e define a cor das fontes. Ex:
+    @function set-text-color($color) {
+      @if lightness($color) > 70 {
+        @return black;
+      } @else {
+        @return white;
+      }
+    }
+
+    $mainColor: #fff;
+    $textColor: set-text-color($mainColor);
+
+    body {
+        background-color: $mainColor;
+        color: $textColor;
+    }
+  //
+-->
+
+<!-- :: Utils ->> Responsividade :: 
+  // mixin's para responsivo
+    @mixin for-phone-only {
+      @media (max-width: 767.98px) {
+        @content;
+      }
+    }
+
+    @mixin for-tablet-only {
+      @media (min-width: 768px) and (max-width: 1199.98px) {
+        @content;
+      }
+    }
+
+    @mixin for-desktop-only {
+      @media (min-width: 1200px) {
+        @content;
+      }
+    }
+    Exemplo de utilização:
+      @include for-phone-only {...estilosAqui}
+      @include for-tablet-only {...estilosAqui}
+      @include for-desktop-only {...estilosAqui}
+  //
+
+  //mixin's para fontes responsivas
+    @function calculateRem($size) {
+      @return $size / 16px * 1rem;
+    }
+
+    @mixin fontSize($size) {
+      font-size: calculateRem($size);
+    }
+
+    Exemplo de utilização:
+    
+  //
+
+-->
+
+<!-- :: Utils ->> Geração automática de Margin/Padding :: 
+
+// Gerando espaços para Margin e Top
+$sizes: 0, 1, 2, 3, 4, 5;
+$directions: top, bottom, left, right;
+$layout-space-size: 8px;
+
+// Generate classes space for margin
+@each $direction in $directions {
+  @for $i from 0 through 5 {
+    %m-#{$direction}-#{$i} {
+      margin-#{$direction}: $layout-space-size * $i;
+    }
+  }
+}
+
+@for $i from 0 through 5 {
+  %m-#{$i} {
+    margin: $layout-space-size * $i;
+  }
+}
+
+// Generate Margin class for Left & Right
+@for $i from 0 through 5 {
+  %mx-#{$i} {
+    margin-left: $layout-space-size * $i;
+    margin-right: $layout-space-size * $i;
+  }
+}
+
+// Generate Margin class for Top & Bottom
+@for $i from 0 through 5 {
+  %my-#{$i} {
+    margin-left: $layout-space-size * $i;
+    margin-right: $layout-space-size * $i;
+  }
+}
+
+// Margin auto for all sides
+%m-auto {
+  margin: auto;
+}
+
+// Generate Margin class auto for Left & Right
+%mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+// Generate Margin class auto for Top & Bottom
+%my-auto {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+// Generate classes space for padding
+@each $direction in $directions {
+  @for $i from 0 through 5 {
+    %p-#{$direction}-#{$i} {
+      padding-#{$direction}: $layout-space-size * $i;
+    }
+  }
+}
+
+@for $i from 0 through 5 {
+  %p-#{$i} {
+    padding: $layout-space-size * $i;
+  }
+}
+
+// Generate padding class for Left & Right
+@for $i from 0 through 5 {
+  %px-#{$i} {
+    padding-left: $layout-space-size * $i;
+    padding-right: $layout-space-size * $i;
+  }
+}
+
+// Generate padding class for Top & Bottom
+@for $i from 0 through 5 {
+  %py-#{$i} {
+    padding-left: $layout-space-size * $i;
+    padding-right: $layout-space-size * $i;
+  }
+}
+-->
